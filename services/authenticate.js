@@ -13,8 +13,11 @@ const login = (req, res) => {
       const hashpwd = user[0].password;
       const token = jwt.sign({ userId: email }, process.env.SECRET_KEY);
 
-      if (bcrypt.compareSync(password, hashpwd)) res.send({ token });
-      else res.sendStatus(400).end();
+      if (bcrypt.compareSync(password, hashpwd)) {
+        res.send({ token });
+      } else {
+        res.sendStatus(400).end();
+      }
     } else {
       res.sendStatus(400).end();
     }
@@ -25,13 +28,16 @@ const login = (req, res) => {
 const authenticate = (req, res, next) => {
   const token = req.header("Authorization");
   if (!token) {
-    res.sendStatus(400).end();
+    res.render("login");
   }
 
   // Verify the received token
   jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
-    if (err) res.sendStatus(400).end();
-    else next();
+    if (err) {
+      res.render("login");
+    } else {
+      next();
+    }
   });
 };
 

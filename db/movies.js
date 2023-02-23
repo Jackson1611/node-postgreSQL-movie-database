@@ -1,10 +1,10 @@
 const db = require("./dbconfig");
 
-// Get all movies
+/// Get all movies
 const getAllMovies = (req, res) => {
   db.query("SELECT * FROM movies", (err, result) => {
     if (err) console.error(err);
-    else res.json(result.rows);
+    else res.render("movielist", { movies: result.rows });
   });
 };
 
